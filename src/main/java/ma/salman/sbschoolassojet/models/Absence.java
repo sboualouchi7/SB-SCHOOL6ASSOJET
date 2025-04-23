@@ -1,0 +1,48 @@
+package ma.salman.sbschoolassojet.models;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+
+@Entity
+@Table(name = "absences")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Absence {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long etudiantId;
+    private Long seanceId;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateDebut;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateFin;
+
+    private String motif;
+
+    @Lob
+    private byte[] justification;
+
+    private boolean validee;
+    private String commentaire;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
+    private Etudiant etudiant;
+
+    @ManyToOne
+    @JoinColumn(name = "seance_id", insertable = false, updatable = false)
+    private Seance seance;
+}
