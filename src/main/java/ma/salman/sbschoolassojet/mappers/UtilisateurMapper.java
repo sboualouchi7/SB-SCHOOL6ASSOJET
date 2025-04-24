@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface UtilisateurMapper {
-    UtilisateurMapper INSTANCE = Mappers.getMapper(UtilisateurMapper.class);
+   // UtilisateurMapper INSTANCE = Mappers.getMapper(UtilisateurMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateCreation", ignore = true)

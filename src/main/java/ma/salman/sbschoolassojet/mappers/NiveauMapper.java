@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface NiveauMapper {
-    NiveauMapper INSTANCE = Mappers.getMapper(NiveauMapper.class);
+  //  NiveauMapper INSTANCE = Mappers.getMapper(NiveauMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "actif", constant = "true")

@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.etudiant;
 
+import lombok.EqualsAndHashCode;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurResponse;
 
 import lombok.AllArgsConstructor;
@@ -11,8 +12,7 @@ import java.util.Date;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class EtudiantResponse extends UtilisateurResponse {
     private Date dateInscription;
     private String filiere;

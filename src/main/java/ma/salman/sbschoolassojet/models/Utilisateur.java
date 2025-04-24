@@ -1,10 +1,7 @@
 package ma.salman.sbschoolassojet.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import ma.salman.sbschoolassojet.enums.Role;
 import ma.salman.sbschoolassojet.enums.Sexe;
@@ -22,6 +19,7 @@ import java.util.List;
 @Table(name = "utilisateurs")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
+@Data
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -75,12 +73,12 @@ public class Utilisateur implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return username;
     }
 
     @Override

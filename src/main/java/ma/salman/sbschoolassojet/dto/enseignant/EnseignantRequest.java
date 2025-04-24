@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurRequest;
@@ -12,8 +13,7 @@ import java.util.Date;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class EnseignantRequest extends UtilisateurRequest {
     @NotBlank(message = "Le numéro de carte est requis")
     private String numeroCarte;

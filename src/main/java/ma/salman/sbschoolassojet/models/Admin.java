@@ -12,9 +12,10 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "admins")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @SuperBuilder
 public class Admin extends Utilisateur{
-
+    public Admin() {
+        super();
+    }
 }

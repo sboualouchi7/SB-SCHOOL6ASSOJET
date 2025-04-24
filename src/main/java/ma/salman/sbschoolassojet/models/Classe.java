@@ -24,6 +24,8 @@ public class Classe {
     private Long id;
 
     private String nom;
+
+    @Column(name = "niveau_id")
     private Long niveauId;
     private String anneeScolaire;
     private int capacite;

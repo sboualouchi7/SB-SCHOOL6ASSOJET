@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface EvaluationMapper {
-    EvaluationMapper INSTANCE = Mappers.getMapper(EvaluationMapper.class);
+   // EvaluationMapper INSTANCE = Mappers.getMapper(EvaluationMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "estValidee", constant = "false")

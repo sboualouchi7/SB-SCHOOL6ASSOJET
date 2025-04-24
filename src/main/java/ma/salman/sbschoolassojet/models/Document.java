@@ -23,8 +23,9 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "etudiant_id")
     private Long etudiantId;
+    @Column(name = "demandeur_id")
     private Long demandeurId;
 
     @Temporal(TemporalType.TIMESTAMP)

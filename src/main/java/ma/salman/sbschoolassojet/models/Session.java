@@ -31,6 +31,7 @@ public class Session {
     @Temporal(TemporalType.DATE)
     private Date dateFin;
 
+    @Column(name = "responsable_id")
     private Long responsableId;
     private String description;
     private String anneeScolaire;

@@ -16,10 +16,12 @@ import java.util.Date;
 @Table(name = "enseignants")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @SuperBuilder
 public class Enseignant extends Utilisateur{
+    public Enseignant() {
+        super();
+    }
     private String numeroCarte;
     private Long departementId;
 

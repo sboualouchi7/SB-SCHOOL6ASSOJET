@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface AbsenceMapper {
-    AbsenceMapper INSTANCE = Mappers.getMapper(AbsenceMapper.class);
+   // AbsenceMapper INSTANCE = Mappers.getMapper(AbsenceMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "validee", constant = "false")

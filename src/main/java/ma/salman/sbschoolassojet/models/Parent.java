@@ -14,11 +14,11 @@ import java.util.Set;
 @Table(name = "parents")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
 public class Parent extends Utilisateur{
-
+    public Parent() {
+        super();
+    }
     private String professionParent;
     private String relationAvecEtudiant;
 

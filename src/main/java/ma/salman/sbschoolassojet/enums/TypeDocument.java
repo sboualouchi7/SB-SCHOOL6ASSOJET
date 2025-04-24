@@ -6,5 +6,6 @@ public enum TypeDocument {
     CERTIFICAT,
     PRESENCE,
     RELEVE_NOTES,
+
     AUTRE
 }

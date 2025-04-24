@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.parent;
 
+import lombok.EqualsAndHashCode;
 import ma.salman.sbschoolassojet.dto.etudiant.EtudiantResponse;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurResponse;
 
@@ -12,8 +13,7 @@ import java.util.Set;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ParentResponse extends UtilisateurResponse {
     private String professionParent;
     private String relationAvecEtudiant;

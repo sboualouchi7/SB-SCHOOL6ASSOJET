@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Mapper(componentModel = "spring")
 public interface SessionModuleMapper {
-    SessionModuleMapper INSTANCE = Mappers.getMapper(SessionModuleMapper.class);
+   // SessionModuleMapper INSTANCE = Mappers.getMapper(SessionModuleMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateAjout", expression = "java(new java.util.Date())")

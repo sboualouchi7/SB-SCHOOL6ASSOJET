@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.parent;
 
+import lombok.EqualsAndHashCode;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurRequest;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,8 +13,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ParentRequest extends UtilisateurRequest {
     @NotBlank(message = "La relation avec l'étudiant est requise")
     private String relationAvecEtudiant;

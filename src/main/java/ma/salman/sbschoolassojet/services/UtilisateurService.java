@@ -8,6 +8,7 @@ import ma.salman.sbschoolassojet.exceptions.ResourceNotFoundException;
 import ma.salman.sbschoolassojet.mappers.UtilisateurMapper;
 import ma.salman.sbschoolassojet.models.Utilisateur;
 import ma.salman.sbschoolassojet.repositories.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,8 @@ import java.util.stream.Collectors;
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurMapper utilisateurMapper;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UtilisateurResponse> getAllUtilisateurs() {
         return utilisateurRepository.findAll().stream()

@@ -20,8 +20,11 @@ public class Absence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "etudiant_id")
     private Long etudiantId;
+
+
+    @Column(name = "seance_id")
     private Long seanceId;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -45,4 +48,10 @@ public class Absence {
     @ManyToOne
     @JoinColumn(name = "seance_id", insertable = false, updatable = false)
     private Seance seance;
+  /*  public Long getEtudiantId() {
+        return etudiant != null ? etudiant.getId() : null;
+    }
+    public Long getSeanceId() {
+        return seance != null ? seance.getId() : null;
+    }*/
 }

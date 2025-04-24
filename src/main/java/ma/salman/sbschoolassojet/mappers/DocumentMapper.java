@@ -10,14 +10,14 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface DocumentMapper {
-    DocumentMapper INSTANCE = Mappers.getMapper(DocumentMapper.class);
+   // DocumentMapper INSTANCE = Mappers.getMapper(DocumentMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateCreation", expression = "java(new java.util.Date())")
     @Mapping(target = "dateDelivrance", ignore = true)
     @Mapping(target = "fichierUrl", ignore = true)
     @Mapping(target = "actif", constant = "true")
-    @Mapping(target = "status", constant = "StatusDocument.DEMANDE")
+    @Mapping(target = "status", constant = "DEMANDE")//j'ai chané StatusDocument.DEMANDE a demande
     @Mapping(target = "etudiant", ignore = true)
     @Mapping(target = "demandeur", ignore = true)
     Document toEntity(DocumentRequest request);

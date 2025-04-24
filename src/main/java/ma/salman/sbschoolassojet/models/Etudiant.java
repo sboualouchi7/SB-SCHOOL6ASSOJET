@@ -15,15 +15,19 @@ import java.util.Set;
 @Table(name = "etudiants")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @SuperBuilder
 public class Etudiant extends Utilisateur{
+    public Etudiant() {
+        super();
+    }
     @Temporal(TemporalType.DATE)
     private Date dateInscription;
 
     private String filiere;
+    @Column(name = "classe_id")
     private Long classeId;
+
     private Long niveauId;
     private String numeroEtudiant;
     private boolean actif;

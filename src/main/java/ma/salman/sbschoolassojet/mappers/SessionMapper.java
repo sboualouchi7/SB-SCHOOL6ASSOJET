@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface SessionMapper {
-    SessionMapper INSTANCE = Mappers.getMapper(SessionMapper.class);
+   // SessionMapper INSTANCE = Mappers.getMapper(SessionMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "actif", constant = "true")

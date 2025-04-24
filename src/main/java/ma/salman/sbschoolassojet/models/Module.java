@@ -27,8 +27,10 @@ public class Module {
     private int volumeHoraire;
     private int seuil;
     private float coefficient;
+    @Column(name = "classe_id")
     private Long classeId;
     private Long niveauId;
+    @Column(name = "enseignant_id")
     private Long enseignantId;
     private boolean actif;
     private String description;

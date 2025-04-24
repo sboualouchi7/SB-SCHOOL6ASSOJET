@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface SeanceMapper {
-    SeanceMapper INSTANCE = Mappers.getMapper(SeanceMapper.class);
+   // SeanceMapper INSTANCE = Mappers.getMapper(SeanceMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "actif", constant = "true")

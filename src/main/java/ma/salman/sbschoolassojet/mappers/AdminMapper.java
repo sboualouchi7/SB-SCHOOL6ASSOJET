@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface AdminMapper {
-    AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
+    //AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateCreation", ignore = true)

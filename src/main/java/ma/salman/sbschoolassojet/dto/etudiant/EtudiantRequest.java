@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.etudiant;
 
+import lombok.EqualsAndHashCode;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurRequest;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,8 +14,7 @@ import java.util.Date;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class EtudiantRequest extends UtilisateurRequest {
     @NotNull(message = "La date d'inscription est requise")
     private Date dateInscription;

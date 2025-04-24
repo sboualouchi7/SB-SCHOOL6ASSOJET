@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface EtudiantMapper {
-    EtudiantMapper INSTANCE = Mappers.getMapper(EtudiantMapper.class);
+    //EtudiantMapper INSTANCE = Mappers.getMapper(EtudiantMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dateCreation", ignore = true)

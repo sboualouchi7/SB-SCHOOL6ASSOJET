@@ -22,9 +22,15 @@ public class Evaluation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
+    @Column(name = "etudiant_id")
     private Long etudiantId;
+    @Column(name = "module_id")
     private Long moduleId;
+    @Column(name = "enseignant_id")
     private Long enseignantId;
+    @Column(name = "session_id")
     private Long sessionId;
     private float note;
 

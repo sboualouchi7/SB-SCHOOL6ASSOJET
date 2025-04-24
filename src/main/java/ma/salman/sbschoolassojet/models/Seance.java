@@ -26,7 +26,9 @@ public class Seance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "module_id")
     private Long moduleId;
+    @Column(name = "enseignant_id")
     private Long enseignantId;
 
     @Temporal(TemporalType.DATE)
