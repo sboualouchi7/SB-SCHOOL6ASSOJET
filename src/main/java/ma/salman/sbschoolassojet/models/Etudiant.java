@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +22,8 @@ public class Etudiant extends Utilisateur{
     public Etudiant() {
         super();
     }
-    @Temporal(TemporalType.DATE)
-    private Date dateInscription;
+
+    private LocalDate dateInscription;
 
     private String filiere;
     @Column(name = "classe_id")

@@ -38,8 +38,8 @@ public class Utilisateur implements UserDetails {
     private String username;
     private String password;
 
-    @Lob
-    private byte[] photo;
+
+    private String photo;
 
     private boolean actifAccount;
 
@@ -49,21 +49,21 @@ public class Utilisateur implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreation;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateModification;
+    private LocalDate dateCreation;
+
+
+    private LocalDate dateModification;
 
     @PrePersist
     protected void onCreate() {
-        this.dateCreation = new Date();
-        this.dateModification = new Date();
+        this.dateCreation = LocalDate.now();
+        this.dateModification = LocalDate.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.dateModification = new Date();
+        this.dateModification = LocalDate.now();
     }
 
     @Override

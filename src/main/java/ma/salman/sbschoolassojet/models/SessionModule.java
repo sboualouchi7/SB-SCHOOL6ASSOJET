@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -25,8 +26,8 @@ public class SessionModule {
     @Column(name = "module_id")
     private Long moduleId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateAjout;
+
+    private LocalDate dateAjout;
 
     private int ordre;
 

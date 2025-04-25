@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.salman.sbschoolassojet.enums.TypeEvaluation;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -34,8 +35,8 @@ public class Evaluation {
     private Long sessionId;
     private float note;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateEvaluation;
+    
+    private LocalDate dateEvaluation;
 
     private String commentaire;
     private boolean estValidee;

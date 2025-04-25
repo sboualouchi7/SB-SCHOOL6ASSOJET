@@ -9,12 +9,12 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {DateMapper.class})
 public interface SessionModuleMapper {
    // SessionModuleMapper INSTANCE = Mappers.getMapper(SessionModuleMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "dateAjout", expression = "java(new java.util.Date())")
+    @Mapping(target = "dateAjout", expression = "java(java.time.LocalDate.now())")
     @Mapping(target = "session", ignore = true)
     @Mapping(target = "module", ignore = true)
     SessionModule toEntity(SessionModuleRequest request);

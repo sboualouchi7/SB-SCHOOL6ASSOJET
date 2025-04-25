@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,9 @@ import lombok.Setter;
 import ma.salman.sbschoolassojet.enums.NumeroSeance;
 import ma.salman.sbschoolassojet.enums.StatusSeance;
 
-import java.sql.Time;
+;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,11 +34,13 @@ public class Seance {
     @Column(name = "enseignant_id")
     private Long enseignantId;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private LocalDate date;
 
-    private Time heureDebut;
-    private Time heureFin;
+
+    private LocalTime heureDebut;
+
+
+    private LocalTime heureFin;
     private String description;
     private boolean actif;
 

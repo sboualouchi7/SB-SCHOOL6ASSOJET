@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,10 +16,10 @@ public class AbsenceResponse {
     private Long id;
     private Long etudiantId;
     private Long seanceId;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private String motif;
-    private byte[] justification;
+    private String justification;
     private boolean validee;
     private String commentaire;
     private String nomEtudiant;

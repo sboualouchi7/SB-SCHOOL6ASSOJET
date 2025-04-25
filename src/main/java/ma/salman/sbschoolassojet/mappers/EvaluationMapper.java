@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {DateMapper.class})
 public interface EvaluationMapper {
    // EvaluationMapper INSTANCE = Mappers.getMapper(EvaluationMapper.class);
 

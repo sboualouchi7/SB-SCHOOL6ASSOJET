@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.etudiant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurRequest;
 
@@ -10,14 +11,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class EtudiantRequest extends UtilisateurRequest {
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @NotNull(message = "La date d'inscription est requise")
-    private Date dateInscription;
+    private LocalDate dateInscription;
 
     private String filiere;
 

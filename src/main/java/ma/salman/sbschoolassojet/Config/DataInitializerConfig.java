@@ -9,12 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Configuration
 public class DataInitializerConfig {
 
-    @Bean
+    //@Bean
     public CommandLineRunner initializeUsers(UtilisateurRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("Démarrage de l'initialisation des utilisateurs...");
@@ -30,8 +31,8 @@ public class DataInitializerConfig {
                 user.setRole(Role.ADMIN);
                 user.setSexe(Sexe.MASCULIN);
                 user.setActifAccount(true);
-                user.setDateCreation(new Date());
-                user.setDateModification(new Date());
+                user.setDateCreation(LocalDate.now());
+                user.setDateModification(LocalDate.now());
 
                 Utilisateur savedUser = userRepository.save(user);
 

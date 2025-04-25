@@ -13,6 +13,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ParentRequest extends UtilisateurRequest {
     @NotBlank(message = "La relation avec l'étudiant est requise")

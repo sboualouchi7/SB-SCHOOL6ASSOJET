@@ -8,12 +8,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {DateMapper.class})
 public interface DocumentMapper {
    // DocumentMapper INSTANCE = Mappers.getMapper(DocumentMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "dateCreation", expression = "java(new java.util.Date())")
+    @Mapping(target = "dateCreation", expression = "java(java.time.LocalDate.now())")
     @Mapping(target = "dateDelivrance", ignore = true)
     @Mapping(target = "fichierUrl", ignore = true)
     @Mapping(target = "actif", constant = "true")

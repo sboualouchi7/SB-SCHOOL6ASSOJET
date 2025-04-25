@@ -3,6 +3,7 @@ package ma.salman.sbschoolassojet.services;
 import lombok.RequiredArgsConstructor;
 import ma.salman.sbschoolassojet.dto.etudiant.EtudiantRequest;
 import ma.salman.sbschoolassojet.dto.etudiant.EtudiantResponse;
+import ma.salman.sbschoolassojet.enums.Role;
 import ma.salman.sbschoolassojet.exceptions.ResourceNotFoundException;
 import ma.salman.sbschoolassojet.mappers.EtudiantMapper;
 import ma.salman.sbschoolassojet.models.Classe;
@@ -58,7 +59,7 @@ public class EtudiantService {
     public EtudiantResponse createEtudiant(EtudiantRequest request) {
         Etudiant etudiant = etudiantMapper.toEntity(request);
         etudiant.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        etudiant.setRole(Role.ETUDIANT);
         // Vérifier que la classe existe
         Classe classe = classeRepository.findById(request.getClasseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Classe non trouvée avec l'ID: " + request.getClasseId()));
@@ -70,9 +71,9 @@ public class EtudiantService {
     public EtudiantResponse updateEtudiant(Long id, EtudiantRequest request) {
         Etudiant etudiant = etudiantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Etudiant non trouvé avec l'ID: " + id));
-
+        Role originalRole = etudiant.getRole();
         etudiantMapper.updateEntityFromDto(request, etudiant);
-
+        etudiant.setRole(originalRole);
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             etudiant.setPassword(passwordEncoder.encode(request.getPassword()));
         }

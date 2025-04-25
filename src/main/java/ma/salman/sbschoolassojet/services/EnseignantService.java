@@ -2,6 +2,7 @@ package ma.salman.sbschoolassojet.services;
 import lombok.RequiredArgsConstructor;
 import ma.salman.sbschoolassojet.dto.enseignant.EnseignantRequest;
 import ma.salman.sbschoolassojet.dto.enseignant.EnseignantResponse;
+import ma.salman.sbschoolassojet.enums.Role;
 import ma.salman.sbschoolassojet.exceptions.ResourceNotFoundException;
 import ma.salman.sbschoolassojet.mappers.EnseignantMapper;
 import ma.salman.sbschoolassojet.models.Enseignant;
@@ -42,6 +43,7 @@ public class EnseignantService {
     public EnseignantResponse createEnseignant(EnseignantRequest request) {
         Enseignant enseignant = enseignantMapper.toEntity(request);
         enseignant.setPassword(passwordEncoder.encode(request.getPassword()));
+        enseignant.setRole(Role.ENSEIGNANT);
         return enseignantMapper.toDto(enseignantRepository.save(enseignant));
     }
 
@@ -49,8 +51,10 @@ public class EnseignantService {
     public EnseignantResponse updateEnseignant(Long id, EnseignantRequest request) {
         Enseignant enseignant = enseignantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Enseignant non trouvé avec l'ID: " + id));
+        Role originalRole = enseignant.getRole();
 
         enseignantMapper.updateEntityFromDto(request, enseignant);
+        enseignant.setRole(originalRole);
 
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             enseignant.setPassword(passwordEncoder.encode(request.getPassword()));

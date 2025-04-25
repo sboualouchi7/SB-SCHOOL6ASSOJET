@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -27,16 +28,16 @@ public class Absence {
     @Column(name = "seance_id")
     private Long seanceId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateDebut;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateFin;
+    private LocalDate dateDebut;
+
+
+    private LocalDate dateFin;
 
     private String motif;
 
-    @Lob
-    private byte[] justification;
+
+    private String justification;
 
     private boolean validee;
     private String commentaire;

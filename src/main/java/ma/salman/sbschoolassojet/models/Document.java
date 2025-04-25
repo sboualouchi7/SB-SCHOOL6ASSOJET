@@ -10,6 +10,7 @@ import lombok.Setter;
 import ma.salman.sbschoolassojet.enums.StatusDocument;
 import ma.salman.sbschoolassojet.enums.TypeDocument;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -28,11 +29,9 @@ public class Document {
     @Column(name = "demandeur_id")
     private Long demandeurId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreation;
+    private LocalDate dateCreation;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateDelivrance;
+    private LocalDate dateDelivrance;
 
     private String fichierUrl;
     private String commentaire;

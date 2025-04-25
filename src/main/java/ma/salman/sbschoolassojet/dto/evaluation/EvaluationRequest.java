@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.evaluation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.salman.sbschoolassojet.enums.TypeEvaluation;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -30,8 +32,9 @@ public class EvaluationRequest {
     @PositiveOrZero(message = "La note doit être positive ou nulle")
     private float note;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @NotNull(message = "La date d'évaluation est requise")
-    private Date dateEvaluation;
+    private LocalDate dateEvaluation;
 
     private String commentaire;
 

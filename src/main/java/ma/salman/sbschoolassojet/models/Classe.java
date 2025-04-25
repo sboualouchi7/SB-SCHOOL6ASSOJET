@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +32,7 @@ public class Classe {
     private int capacite;
     private boolean actif;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreation;
+    private LocalDate dateCreation;
 
     @ManyToOne
     @JoinColumn(name = "niveau_id", insertable = false, updatable = false)
@@ -46,6 +46,6 @@ public class Classe {
 
     @PrePersist
     protected void onCreate() {
-        this.dateCreation = new Date();
+        this.dateCreation = LocalDate.now();
     }
 }

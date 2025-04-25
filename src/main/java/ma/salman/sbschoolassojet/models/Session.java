@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.salman.sbschoolassojet.enums.StatutSession;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,11 +26,9 @@ public class Session {
 
     private String nom;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateDebut;
+    private LocalDate dateDebut;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateFin;
+    private LocalDate dateFin;
 
     @Column(name = "responsable_id")
     private Long responsableId;

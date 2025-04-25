@@ -16,6 +16,7 @@ import ma.salman.sbschoolassojet.repositories.UtilisateurRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public class SessionService {
                 SessionModule sessionModule = SessionModule.builder()
                         .sessionId(savedSession.getId())
                         .moduleId(moduleId)
-                        .dateAjout(new Date())
+                        .dateAjout(LocalDate.now())
                         .ordre(ordre++)
                         .build();
 
@@ -122,7 +123,7 @@ public class SessionService {
                 SessionModule sessionModule = SessionModule.builder()
                         .sessionId(updatedSession.getId())
                         .moduleId(moduleId)
-                        .dateAjout(new Date())
+                        .dateAjout(LocalDate.now())
                         .ordre(ordre++)
                         .build();
 

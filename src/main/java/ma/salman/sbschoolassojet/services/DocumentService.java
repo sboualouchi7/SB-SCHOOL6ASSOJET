@@ -16,6 +16,7 @@ import ma.salman.sbschoolassojet.repositories.UtilisateurRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,12 +70,14 @@ public class DocumentService {
         Document document = documentMapper.toEntity(request);
 
         // Vérifier que l'étudiant existe
-        Etudiant etudiant = etudiantRepository.findById(request.getEtudiantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Etudiant non trouvé avec l'ID: " + request.getEtudiantId()));
+       Etudiant etudiant = etudiantRepository.findById(request.getEtudiantId())
+               .orElseThrow(() -> new ResourceNotFoundException("Etudiant non trouvé avec l'ID: " + request.getEtudiantId()));
 
         // Vérifier que le demandeur existe
         Utilisateur demandeur = utilisateurRepository.findById(request.getDemandeurId())
                 .orElseThrow(() -> new ResourceNotFoundException("Demandeur non trouvé avec l'ID: " + request.getDemandeurId()));
+       document.setEtudiant(etudiant);
+        document.setDemandeur(demandeur);
 
         return documentMapper.toDto(documentRepository.save(document));
     }
@@ -109,7 +112,7 @@ public class DocumentService {
         document.setStatus(status);
 
         if (status == StatusDocument.PRET) {
-            document.setDateDelivrance(new Date());
+            document.setDateDelivrance(LocalDate.now());
         }
 
         return documentMapper.toDto(documentRepository.save(document));
@@ -131,4 +134,36 @@ public class DocumentService {
         }
         documentRepository.deleteById(id);
     }
+
+
+    /*
+    affecter directement le id du user connecte au demande de doc
+    @Transactional
+public DocumentResponse createDocument(DocumentRequest request) {
+    // Récupérer l'utilisateur authentifié actuel
+    Utilisateur demandeurActuel = getCurrentAuthenticatedUser();
+
+    // Créer le document à partir de la requête
+    Document document = documentMapper.toEntity(request);
+
+    // Vérifier que l'étudiant existe
+    Etudiant etudiant = etudiantRepository.findById(request.getEtudiantId())
+            .orElseThrow(() -> new ResourceNotFoundException("Etudiant non trouvé avec l'ID: " + request.getEtudiantId()));
+
+    // Associer l'étudiant et le demandeur (utilisateur authentifié) au document
+    document.setEtudiant(etudiant);
+    document.setDemandeur(demandeurActuel);
+
+    return documentMapper.toDto(documentRepository.save(document));
+}
+
+// Méthode pour récupérer l'utilisateur authentifié actuel
+private Utilisateur getCurrentAuthenticatedUser() {
+    // Si vous utilisez Spring Security
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    return utilisateurRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("Utilisateur authentifié non trouvé"));
+}*/
 }

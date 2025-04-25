@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.enseignant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurResponse;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,6 +17,8 @@ import java.util.Date;
 public class EnseignantResponse extends UtilisateurResponse {
     private String numeroCarte;
     private Long departementId;
-    private Date dateEmbauche;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dateEmbauche;
     private String specialite;
 }

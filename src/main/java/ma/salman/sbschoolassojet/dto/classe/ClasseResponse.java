@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,6 +19,6 @@ public class ClasseResponse {
     private String anneeScolaire;
     private int capacite;
     private boolean actif;
-    private Date dateCreation;
+    private LocalDate dateCreation;
     private String labelNiveau;
 }

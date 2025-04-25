@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -25,8 +26,8 @@ public class Enseignant extends Utilisateur{
     private String numeroCarte;
     private Long departementId;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateEmbauche;
+
+    private LocalDate dateEmbauche;
 
     private String specialite;
 }

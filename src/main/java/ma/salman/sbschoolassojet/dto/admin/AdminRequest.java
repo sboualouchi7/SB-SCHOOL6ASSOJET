@@ -9,6 +9,7 @@ import ma.salman.sbschoolassojet.dto.utilisateur.UtilisateurRequest;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class AdminRequest extends UtilisateurRequest {
 }

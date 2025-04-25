@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.utilisateur;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ma.salman.sbschoolassojet.enums.Role;
 import ma.salman.sbschoolassojet.enums.Sexe;
+
+import java.time.LocalDate;
 
 @Data
 @SuperBuilder
@@ -26,7 +29,10 @@ public class UtilisateurRequest {
     private String email;
 
     private String telephone;
-    private String dateNaissance;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+
+    private LocalDate dateNaissance;
     private String adresse;
 
     @NotBlank(message = "Le nom d'utilisateur est requis")
@@ -35,9 +41,9 @@ public class UtilisateurRequest {
     @NotBlank(message = "Le mot de passe est requis")
     private String password;
 
-    private byte[] photo;
+    private String photo;
 
-    @NotNull(message = "Le rôle est requis")
+   // @NotNull(message = "Le rôle est requis")
     private Role role;
 
     @NotNull(message = "Le sexe est requis")

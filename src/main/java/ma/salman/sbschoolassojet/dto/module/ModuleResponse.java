@@ -1,11 +1,13 @@
 package ma.salman.sbschoolassojet.dto.module;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.salman.sbschoolassojet.enums.TypeModule;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -24,8 +26,12 @@ public class ModuleResponse {
     private boolean actif;
     private String description;
     private TypeModule typeModule;
-    private Date dateCreation;
-    private Date dateModification;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dateCreation;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dateModification;
     private String nomEnseignant;
     private String nomClasse;
 }

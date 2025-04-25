@@ -8,6 +8,7 @@ import ma.salman.sbschoolassojet.enums.NumeroSeance;
 import ma.salman.sbschoolassojet.enums.StatusSeance;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data

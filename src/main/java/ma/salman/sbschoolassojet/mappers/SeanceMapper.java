@@ -6,11 +6,12 @@ import ma.salman.sbschoolassojet.models.Seance;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+import java.sql.Time;
+import java.time.LocalTime;
+
+@Mapper(componentModel = "spring", uses = {DateMapper.class})
 public interface SeanceMapper {
-   // SeanceMapper INSTANCE = Mappers.getMapper(SeanceMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "actif", constant = "true")
@@ -28,4 +29,20 @@ public interface SeanceMapper {
     @Mapping(target = "enseignant", ignore = true)
     @Mapping(target = "absences", ignore = true)
     void updateEntityFromDto(SeanceRequest request, @MappingTarget Seance entity);
+
+    // Méthode de conversion directement dans l'interface
+    default Time map(LocalTime localTime) {
+        if (localTime == null) {
+            return null;
+        }
+        return Time.valueOf(localTime);
+    }
+
+    // Méthode inverse si nécessaire
+    default LocalTime map(Time time) {
+        if (time == null) {
+            return null;
+        }
+        return time.toLocalTime();
+    }
 }

@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.dto.seance;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import ma.salman.sbschoolassojet.enums.NumeroSeance;
 import ma.salman.sbschoolassojet.enums.StatusSeance;
 
-import java.sql.Time;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data
@@ -23,13 +26,15 @@ public class SeanceRequest {
     private Long enseignantId;
 
     @NotNull(message = "La date est requise")
-    private Date date;
+    private LocalDate date;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @NotNull(message = "L'heure de début est requise")
-    private Time heureDebut;
+    private LocalTime heureDebut;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @NotNull(message = "L'heure de fin est requise")
-    private Time heureFin;
+    private LocalTime heureFin;
 
     private String description;
 

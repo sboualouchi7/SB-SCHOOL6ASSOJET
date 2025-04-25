@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ma.salman.sbschoolassojet.models.Module;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {DateMapper.class})
 public interface ModuleMapper {
    // ModuleMapper INSTANCE = Mappers.getMapper(ModuleMapper.class);
 

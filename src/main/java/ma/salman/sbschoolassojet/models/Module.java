@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.Builder;
 import ma.salman.sbschoolassojet.enums.TypeModule;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,11 +39,11 @@ public class Module {
     @Enumerated(EnumType.STRING)
     private TypeModule typeModule;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreation;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateModification;
+    private LocalDate dateCreation;
+
+
+    private LocalDate dateModification;
 
     @ManyToOne
     @JoinColumn(name = "classe_id", insertable = false, updatable = false)
@@ -63,12 +64,12 @@ public class Module {
 
     @PrePersist
     protected void onCreate() {
-        this.dateCreation = new Date();
-        this.dateModification = new Date();
+        this.dateCreation = LocalDate.now();
+        this.dateModification = LocalDate.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.dateModification = new Date();
+        this.dateModification = LocalDate.now();
     }
 }
