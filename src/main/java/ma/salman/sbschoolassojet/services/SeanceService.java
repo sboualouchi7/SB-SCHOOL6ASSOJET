@@ -14,6 +14,7 @@ import ma.salman.sbschoolassojet.repositories.SeanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,19 +58,19 @@ public class SeanceService {
                 .collect(Collectors.toList());
     }
 
-    public List<SeanceResponse> getSeancesByDate(Date date) {
+    public List<SeanceResponse> getSeancesByDate(LocalDate date) {
         return seanceRepository.findByDate(date).stream()
                 .map(seanceMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<SeanceResponse> getSeancesByEnseignantAndPeriode(Long enseignantId, Date dateDebut, Date dateFin) {
+    public List<SeanceResponse> getSeancesByEnseignantAndPeriode(Long enseignantId, LocalDate dateDebut, LocalDate dateFin) {
         return seanceRepository.findByEnseignantIdAndPeriode(enseignantId, dateDebut, dateFin).stream()
                 .map(seanceMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<SeanceResponse> getSeancesByClasseAndDate(Long classeId, Date date) {
+    public List<SeanceResponse> getSeancesByClasseAndDate(Long classeId, LocalDate date) {
         return seanceRepository.findByClasseIdAndDate(classeId, date).stream()
                 .map(seanceMapper::toDto)
                 .collect(Collectors.toList());
@@ -86,6 +87,8 @@ public class SeanceService {
         // Vérifier que l'enseignant existe
         Enseignant enseignant = enseignantRepository.findById(request.getEnseignantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Enseignant non trouvé avec l'ID: " + request.getEnseignantId()));
+        seance.setModule(module);
+        seance.setEnseignant(enseignant);
 
         return seanceMapper.toDto(seanceRepository.save(seance));
     }

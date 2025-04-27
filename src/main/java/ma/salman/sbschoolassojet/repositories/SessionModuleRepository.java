@@ -11,5 +11,7 @@ import java.util.List;
 public interface SessionModuleRepository extends JpaRepository<SessionModule, Long> {
     List<SessionModule> findBySessionId(Long sessionId);
     List<SessionModule> findByModuleId(Long moduleId);
+    //  trouver les SessionModule par liste d'IDs de modules
+    List<SessionModule> findByModuleIdIn(List<Long> moduleIds);
     List<SessionModule> findBySessionIdOrderByOrdreAsc(Long sessionId);
 }

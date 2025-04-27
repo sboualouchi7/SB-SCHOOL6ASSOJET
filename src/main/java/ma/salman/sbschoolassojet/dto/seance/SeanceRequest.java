@@ -26,6 +26,7 @@ public class SeanceRequest {
     private Long enseignantId;
 
     @NotNull(message = "La date est requise")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
     @JsonFormat(pattern = "HH:mm:ss")

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface AbsenceRepository extends JpaRepository<Absence, Long> {
 
     @Query("SELECT a FROM Absence a WHERE a.etudiantId = :etudiantId AND a.dateDebut >= :dateDebut AND a.dateFin <= :dateFin")
     List<Absence> findByEtudiantIdAndPeriode(@Param("etudiantId") Long etudiantId,
-                                             @Param("dateDebut") Date dateDebut,
-                                             @Param("dateFin") Date dateFin);
+                                             @Param("dateDebut") LocalDate dateDebut,
+                                             @Param("dateFin") LocalDate dateFin);
 }

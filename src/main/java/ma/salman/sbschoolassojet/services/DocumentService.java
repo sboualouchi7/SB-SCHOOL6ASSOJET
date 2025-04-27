@@ -89,16 +89,18 @@ public class DocumentService {
 
         documentMapper.updateEntityFromDto(request, document);
 
-        // Vérifier que l'étudiant existe s'il est modifié
+        // Vérifier que l'étudiant existe s'il est modifié et l'assigner au document
         if (request.getEtudiantId() != null && !request.getEtudiantId().equals(document.getEtudiantId())) {
             Etudiant etudiant = etudiantRepository.findById(request.getEtudiantId())
                     .orElseThrow(() -> new ResourceNotFoundException("Etudiant non trouvé avec l'ID: " + request.getEtudiantId()));
+            document.setEtudiant(etudiant); // Ajout de cette ligne pour lier l'étudiant
         }
 
-        // Vérifier que le demandeur existe s'il est modifié
+        // Vérifier que le demandeur existe s'il est modifié et l'assigner au document
         if (request.getDemandeurId() != null && !request.getDemandeurId().equals(document.getDemandeurId())) {
             Utilisateur demandeur = utilisateurRepository.findById(request.getDemandeurId())
                     .orElseThrow(() -> new ResourceNotFoundException("Demandeur non trouvé avec l'ID: " + request.getDemandeurId()));
+            document.setDemandeur(demandeur); // Ajout de cette ligne pour lier le demandeur
         }
 
         return documentMapper.toDto(documentRepository.save(document));

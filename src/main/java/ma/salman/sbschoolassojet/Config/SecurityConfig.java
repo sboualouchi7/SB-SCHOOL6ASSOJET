@@ -76,6 +76,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/enseignants/**").permitAll()
                                 .requestMatchers("/api/parents/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/api/absences/**").authenticated()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 );
