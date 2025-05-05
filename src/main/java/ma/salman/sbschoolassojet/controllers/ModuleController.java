@@ -5,11 +5,13 @@ import ma.salman.sbschoolassojet.dto.common.ApiResponse;
 import ma.salman.sbschoolassojet.dto.module.ModuleRequest;
 import ma.salman.sbschoolassojet.dto.module.ModuleResponse;
 import ma.salman.sbschoolassojet.dto.session.SessionResponse;
+import ma.salman.sbschoolassojet.models.Enseignant;
 import ma.salman.sbschoolassojet.security.UserDetailsImpl;
 import ma.salman.sbschoolassojet.services.ModuleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +61,7 @@ public class ModuleController {
     }
 
     @GetMapping("/enseignant/{enseignantId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT', 'ETUDIANT', 'PARENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<ModuleResponse>>> getModulesByEnseignant(@PathVariable Long enseignantId) {
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -68,6 +70,7 @@ public class ModuleController {
                 null
         ));
     }
+    //, @AuthenticationPrincipal Enseignant enseignant
 
     @GetMapping("/mes-modules")
     @PreAuthorize("hasRole('ENSEIGNANT')")

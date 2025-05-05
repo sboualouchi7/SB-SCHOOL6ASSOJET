@@ -1,5 +1,6 @@
 package ma.salman.sbschoolassojet.controllers;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import ma.salman.sbschoolassojet.dto.auth.JwtResponse;
 import ma.salman.sbschoolassojet.dto.auth.LoginRequest;
 import ma.salman.sbschoolassojet.dto.common.ApiResponse;
@@ -9,13 +10,14 @@ import ma.salman.sbschoolassojet.repositories.UtilisateurRepository;
 import ma.salman.sbschoolassojet.security.JwtUtils;
 import ma.salman.sbschoolassojet.security.UserDetailsImpl;
 import ma.salman.sbschoolassojet.security.UserDetailsServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -24,14 +26,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UtilisateurRepository utilisateurRepository;
     private final JwtUtils jwtUtils;
-
-    public AuthController(AuthenticationManager authenticationManager,
-                          UtilisateurRepository utilisateurRepository,
-                          JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
-        this.utilisateurRepository = utilisateurRepository;
-        this.jwtUtils = jwtUtils;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -101,14 +95,15 @@ public class AuthController {
     }
 
     @GetMapping("/email/{email}/exists")
-    public ResponseEntity<?> checkEmailExists(@PathVariable String email) {
+    public ResponseEntity<ApiResponse> checkEmailExists(@PathVariable String email) {
         boolean exists = utilisateurRepository.existsByEmail(email);
-        return ResponseEntity.ok(new ApiResponse<>(
+        var response = new ApiResponse<>(
                 true,
                 "Vérification terminée",
                 exists,
                 null
-        ));
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/roles")

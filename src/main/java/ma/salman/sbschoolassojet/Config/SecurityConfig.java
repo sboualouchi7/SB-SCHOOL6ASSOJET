@@ -27,6 +27,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+  //  private final String[] WHITELIST = [""];
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
@@ -72,11 +74,11 @@ public class SecurityConfig {
                         .frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
+                            //    .requestMatchers(WHITELIST).permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/enseignants/**").permitAll()
                                 .requestMatchers("/api/parents/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers("/api/absences/**").authenticated()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 );
