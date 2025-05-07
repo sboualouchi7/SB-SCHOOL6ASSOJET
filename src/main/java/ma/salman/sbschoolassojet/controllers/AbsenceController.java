@@ -58,7 +58,36 @@ public class AbsenceController {
                 null
         ));
     }
+    //absence le etudiant authentifier
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ETUDIANT')")
+    public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getMyAbsences() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long etudiantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
 
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes absences récupérées avec succès",
+                absenceService.getAbsencesByEtudiant(etudiantId),
+                null
+        ));
+    }
+    /**
+     * Récupère les absences des enfants du parent authentifié
+     */
+    @GetMapping("/mes-enfants")
+    @PreAuthorize("hasRole('PARENT')")
+    public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesOfMyChildren() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long parentId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Absences des enfants récupérées avec succès",
+                absenceService.getAbsencesByParent(parentId),
+                null
+        ));
+    }
     @GetMapping("/seance/{seanceId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesBySeance(@PathVariable Long seanceId) {
@@ -133,7 +162,7 @@ public class AbsenceController {
         ));
     }
 
-    // Nouveaux endpoints pour le flux d'enregistrement des absences
+
 
     @GetMapping("/module/{moduleId}/classe/{classeId}/etudiants")
     @PreAuthorize("hasRole('ENSEIGNANT')")

@@ -3,9 +3,12 @@ import jakarta.validation.Valid;
 import ma.salman.sbschoolassojet.dto.classe.ClasseRequest;
 import ma.salman.sbschoolassojet.dto.classe.ClasseResponse;
 import ma.salman.sbschoolassojet.dto.common.ApiResponse;
+import ma.salman.sbschoolassojet.security.UserDetailsImpl;
 import ma.salman.sbschoolassojet.services.ClasseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,7 +66,24 @@ public class ClasseController {
                 null
         ));
     }
+    /**
+     * Récupère les classes de l'enseignant authentifié
+     * @return ResponseEntity contenant la liste des classes de l'enseignant
+     */
+    @GetMapping("/enseignant/me")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<ApiResponse<List<ClasseResponse>>> getMyClasses() {
+        // Récupérer l'ID de l'enseignant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long enseignantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
 
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes classes récupérées avec succès",
+                classeService.getClassesByEnseignant(enseignantId),
+                null
+        ));
+    }
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<ClasseResponse>> createClasse(@Valid @RequestBody ClasseRequest request) {

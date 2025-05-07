@@ -5,9 +5,12 @@ import ma.salman.sbschoolassojet.dto.etudiant.EtudiantResponse;
 import ma.salman.sbschoolassojet.dto.evaluation.EvaluationRequest;
 import ma.salman.sbschoolassojet.dto.evaluation.EvaluationResponse;
 import ma.salman.sbschoolassojet.enums.TypeEvaluation;
+import ma.salman.sbschoolassojet.security.UserDetailsImpl;
 import ma.salman.sbschoolassojet.services.EvaluationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -98,7 +101,61 @@ public class EvaluationController {
                 null
         ));
     }
+    /**
+     * Récupère toutes les évaluations de l'étudiant connecté
+     */
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ETUDIANT')")
+    public ResponseEntity<ApiResponse<List<EvaluationResponse>>> getMyEvaluations() {
+        // Récupérer l'ID de l'étudiant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long etudiantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
 
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes évaluations récupérées avec succès",
+                evaluationService.getEvaluationsByEtudiant(etudiantId),
+                null
+        ));
+    }
+
+    /**
+     * Récupère les évaluations de l'étudiant connecté pour un module spécifique
+     */
+    @GetMapping("/me/module/{moduleId}")
+    @PreAuthorize("hasRole('ETUDIANT')")
+    public ResponseEntity<ApiResponse<List<EvaluationResponse>>> getMyEvaluationsByModule(
+            @PathVariable Long moduleId) {
+        // Récupérer l'ID de l'étudiant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long etudiantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes évaluations pour le module récupérées avec succès",
+                evaluationService.getEvaluationsByEtudiantAndModule(etudiantId, moduleId),
+                null
+        ));
+    }
+
+    /**
+     * Récupère la moyenne de l'étudiant connecté pour un module spécifique
+     */
+    @GetMapping("/me/module/{moduleId}/moyenne")
+    @PreAuthorize("hasRole('ETUDIANT')")
+    public ResponseEntity<ApiResponse<Float>> getMyMoyenneByModule(
+            @PathVariable Long moduleId) {
+        // Récupérer l'ID de l'étudiant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long etudiantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Ma moyenne pour le module récupérée avec succès",
+                evaluationService.getMoyenneByEtudiantAndModule(etudiantId, moduleId),
+                null
+        ));
+    }
     @GetMapping("/etudiant/{etudiantId}/module/{moduleId}/moyenne")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<Float>> getMoyenneByEtudiantAndModule(

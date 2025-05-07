@@ -33,7 +33,21 @@ public class ClasseService {
                 .map(classeMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Classe non trouvée avec l'ID: " + id));
     }
+    /**
+     * Récupère toutes les classes associées à un enseignant
+     *
+     * @param enseignantId ID de l'enseignant
+     * @return Liste des classes de l'enseignant
+     */
+    public List<ClasseResponse> getClassesByEnseignant(Long enseignantId) {
+        // Récupérer les classes où l'enseignant donne des cours
+        List<Classe> classes = classeRepository.findByEnseignantId(enseignantId);
 
+        // Convertir en DTOs avec le mapper
+        return classes.stream()
+                .map(classeMapper::toDto)
+                .collect(Collectors.toList());
+    }
     public List<ClasseResponse> getClassesByNiveau(Long niveauId) {
         return classeRepository.findByNiveauId(niveauId).stream()
                 .map(classeMapper::toDto)

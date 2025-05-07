@@ -6,16 +6,9 @@ import ma.salman.sbschoolassojet.dto.etudiant.EtudiantResponse;
 import ma.salman.sbschoolassojet.exceptions.ResourceNotFoundException;
 import ma.salman.sbschoolassojet.mappers.AbsenceMapper;
 import ma.salman.sbschoolassojet.mappers.EtudiantMapper;
-import ma.salman.sbschoolassojet.models.Absence;
-import ma.salman.sbschoolassojet.models.Classe;
-import ma.salman.sbschoolassojet.models.Etudiant;
+import ma.salman.sbschoolassojet.models.*;
 import ma.salman.sbschoolassojet.models.Module;
-import ma.salman.sbschoolassojet.models.Seance;
-import ma.salman.sbschoolassojet.repositories.AbsenceRepository;
-import ma.salman.sbschoolassojet.repositories.ClasseRepository;
-import ma.salman.sbschoolassojet.repositories.EtudiantRepository;
-import ma.salman.sbschoolassojet.repositories.ModuleRepository;
-import ma.salman.sbschoolassojet.repositories.SeanceRepository;
+import ma.salman.sbschoolassojet.repositories.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +28,7 @@ public class AbsenceService {
     private final ClasseRepository classeRepository;
     private final AbsenceMapper absenceMapper;
     private final EtudiantMapper etudiantMapper;
+    private final ParentRepository parentRepository;
 
     public List<AbsenceResponse> getAllAbsences() {
         return absenceRepository.findAll().stream()
@@ -65,7 +59,29 @@ public class AbsenceService {
                 .map(absenceMapper::toDto)
                 .collect(Collectors.toList());
     }
+    /**
+     * Récupère toutes les absences des enfants d'un parent spécifique
+     *
+     * @param parentId ID du parent
+     * @return Liste des absences des enfants du parent
+     */
+    public List<AbsenceResponse> getAbsencesByParent(Long parentId) {
+        // Récupérer la liste des IDs des enfants du parent
+        Parent parent = parentRepository.findById(parentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Parent non trouvé avec l'ID : " + parentId));
 
+        List<Long> enfantsIds = parent.getEnfants().stream()
+                .map(Etudiant::getId)
+                .collect(Collectors.toList());
+
+        // Récupérer les absences pour tous les enfants
+        List<Absence> absences = absenceRepository.findByEtudiantIdIn(enfantsIds);
+
+        // Utiliser le mapper pour convertir en DTOs
+        return absences.stream()
+                .map(absenceMapper::toDto)
+                .collect(Collectors.toList());
+    }
     @Transactional
     public AbsenceResponse createAbsence(AbsenceRequest request) {
         Absence absence = absenceMapper.toEntity(request);
@@ -179,4 +195,5 @@ public class AbsenceService {
                 .map(absenceMapper::toDto)
                 .collect(Collectors.toList());
     }
+
 }

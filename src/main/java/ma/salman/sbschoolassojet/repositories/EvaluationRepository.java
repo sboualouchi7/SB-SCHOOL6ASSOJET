@@ -17,7 +17,10 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     List<Evaluation> findByType(TypeEvaluation type);
     List<Evaluation> findByEstValideeTrue();
     List<Evaluation> findByEstValideeFalse();
-
+    /**
+     * Trouve les évaluations par ID d'étudiant et ID de module
+     */
+    List<Evaluation> findByEtudiantIdAndModuleId(Long etudiantId, Long moduleId);
     @Query("SELECT AVG(e.note) FROM Evaluation e WHERE e.etudiantId = :etudiantId AND e.moduleId = :moduleId AND e.estValidee = true")
     Float findMoyenneByEtudiantIdAndModuleId(@Param("etudiantId") Long etudiantId, @Param("moduleId") Long moduleId);
 

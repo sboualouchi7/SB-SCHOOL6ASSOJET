@@ -4,10 +4,13 @@ import ma.salman.sbschoolassojet.dto.common.ApiResponse;
 import ma.salman.sbschoolassojet.dto.seance.SeanceRequest;
 import ma.salman.sbschoolassojet.dto.seance.SeanceResponse;
 import ma.salman.sbschoolassojet.enums.StatusSeance;
+import ma.salman.sbschoolassojet.security.UserDetailsImpl;
 import ma.salman.sbschoolassojet.services.SeanceService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -34,7 +37,63 @@ public class SeanceController {
                 null
         ));
     }
+    /**
+     * Récupère les séances de l'enseignant connecté
+     */
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<ApiResponse<List<SeanceResponse>>> getMySeances() {
+        // Récupérer l'ID de l'enseignant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long enseignantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
 
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes séances récupérées avec succès",
+                seanceService.getSeancesByEnseignant(enseignantId),
+                null
+        ));
+    }
+
+    /**
+     * Récupère les séances de l'enseignant connecté pour une période spécifique
+     */
+    @GetMapping("/me/periode")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<ApiResponse<List<SeanceResponse>>> getMySeancesByPeriode(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateDebut,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateFin) {
+        // Récupérer l'ID de l'enseignant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long enseignantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes séances pour la période récupérées avec succès",
+                seanceService.getSeancesByEnseignantAndPeriode(enseignantId, dateDebut, dateFin),
+                null
+        ));
+    }
+
+    /**
+     * Récupère les séances de l'enseignant connecté pour une date spécifique
+     */
+    @GetMapping("/me/date/{date}")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<ApiResponse<List<SeanceResponse>>> getMySeancesByDate(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        // Récupérer l'ID de l'enseignant connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long enseignantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+
+        // Utiliser la même date comme début et fin pour obtenir les séances d'une journée
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes séances pour la date récupérées avec succès",
+                seanceService.getSeancesByEnseignantAndPeriode(enseignantId, date, date),
+                null
+        ));
+    }
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT', 'ETUDIANT', 'PARENT')")
     public ResponseEntity<ApiResponse<SeanceResponse>> getSeanceById(@PathVariable Long id) {

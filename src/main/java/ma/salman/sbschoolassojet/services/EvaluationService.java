@@ -39,7 +39,15 @@ public class EvaluationService {
                 .map(evaluationMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Evaluation non trouvée avec l'ID: " + id));
     }
-
+    /**
+     * Récupère les évaluations d'un étudiant pour un module spécifique
+     */
+    public List<EvaluationResponse> getEvaluationsByEtudiantAndModule(Long etudiantId, Long moduleId) {
+        List<Evaluation> evaluations = evaluationRepository.findByEtudiantIdAndModuleId(etudiantId, moduleId);
+        return evaluations.stream()
+                .map(evaluationMapper::toDto)
+                .collect(Collectors.toList());
+    }
     public List<EvaluationResponse> getEvaluationsByEtudiant(Long etudiantId) {
         return evaluationRepository.findByEtudiantId(etudiantId).stream()
                 .map(evaluationMapper::toDto)
