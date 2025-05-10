@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurMapper utilisateurMapper;
+    private final CloudinaryService cloudinaryService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -36,7 +39,7 @@ public class UtilisateurService {
                 .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
     }
 
-    @Transactional
+    /**@Transactional
     public UtilisateurResponse createUtilisateur(UtilisateurRequest request) {
         Utilisateur utilisateur = utilisateurMapper.toEntity(request);
         utilisateur.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -64,7 +67,81 @@ public class UtilisateurService {
         }
         utilisateurRepository.deleteById(id);
     }
+**/
+    @Transactional
+    public UtilisateurResponse createUtilisateur(UtilisateurRequest request, MultipartFile photo) throws IOException {
+        Utilisateur utilisateur = utilisateurMapper.toEntity(request);
+        utilisateur.setPassword(passwordEncoder.encode(request.getPassword()));
 
+        if (photo != null && !photo.isEmpty()) {
+            String photoUrl = cloudinaryService.uploadImage(photo);
+            utilisateur.setPhoto(photoUrl);
+        }
+
+        return utilisateurMapper.toDto(utilisateurRepository.save(utilisateur));
+    }
+
+    @Transactional
+    public UtilisateurResponse updateUtilisateur(Long id, UtilisateurRequest request, MultipartFile photo) throws IOException {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
+
+        utilisateurMapper.updateEntityFromDto(request, utilisateur);
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            utilisateur.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        if (photo != null && !photo.isEmpty()) {
+            // Si l'utilisateur a déjà une photo, la supprimer d'abord
+            if (utilisateur.getPhoto() != null && !utilisateur.getPhoto().isEmpty()) {
+                cloudinaryService.deleteImage(utilisateur.getPhoto());
+            }
+
+            // Télécharger la nouvelle photo
+            String photoUrl = cloudinaryService.uploadImage(photo);
+            utilisateur.setPhoto(photoUrl);
+        }
+
+        return utilisateurMapper.toDto(utilisateurRepository.save(utilisateur));
+    }
+
+    @Transactional
+    public UtilisateurResponse updateUtilisateurPhoto(Long id, MultipartFile photo) throws IOException {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
+
+        if (photo != null && !photo.isEmpty()) {
+            // Si l'utilisateur a déjà une photo, la supprimer d'abord
+            if (utilisateur.getPhoto() != null && !utilisateur.getPhoto().isEmpty()) {
+                cloudinaryService.deleteImage(utilisateur.getPhoto());
+            }
+
+            // Télécharger la nouvelle photo
+            String photoUrl = cloudinaryService.uploadImage(photo);
+            utilisateur.setPhoto(photoUrl);
+        }
+
+        return utilisateurMapper.toDto(utilisateurRepository.save(utilisateur));
+    }
+
+    @Transactional
+    public void deleteUtilisateur(Long id) {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
+
+        // Supprimer la photo de Cloudinary si elle existe
+        if (utilisateur.getPhoto() != null && !utilisateur.getPhoto().isEmpty()) {
+            try {
+                cloudinaryService.deleteImage(utilisateur.getPhoto());
+            } catch (IOException e) {
+                // Loggez l'erreur, mais continuez la suppression
+                e.printStackTrace();
+            }
+        }
+
+        utilisateurRepository.deleteById(id);
+    }
     public List<UtilisateurResponse> getUtilisateursByRole(Role role) {
         return utilisateurRepository.findByRole(role).stream()
                 .map(utilisateurMapper::toDto)
