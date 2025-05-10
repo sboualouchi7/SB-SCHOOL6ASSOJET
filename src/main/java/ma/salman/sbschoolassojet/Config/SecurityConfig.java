@@ -1,6 +1,5 @@
 package ma.salman.sbschoolassojet.Config;
 
-
 import ma.salman.sbschoolassojet.security.AuthEntryPointJwt;
 import ma.salman.sbschoolassojet.security.AuthTokenFilter;
 import ma.salman.sbschoolassojet.security.UserDetailsServiceImpl;
@@ -12,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +28,20 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-  //  private final String[] WHITELIST = [""];
+    // Définition des chemins publics
+    private static final String[] PUBLIC_URLS = {
+            "/api/auth/**",
+            "/api/test/**",
+            "/api/enseignants/**",
+            "/api/parents/**",
+            "/h2-console/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
@@ -45,10 +58,8 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 
@@ -64,25 +75,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                        .disable())
+        // Configuration simplifiée et plus directe
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin()))
+                .headers(headers -> headers.frameOptions().sameOrigin())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                            //    .requestMatchers(WHITELIST).permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/api/enseignants/**").permitAll()
-                                .requestMatchers("/api/parents/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        auth.requestMatchers(PUBLIC_URLS).permitAll()
                                 .anyRequest().authenticated()
                 );
 
+        // Ajout des fournisseurs et filtres d'authentification
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
