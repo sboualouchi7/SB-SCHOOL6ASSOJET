@@ -23,7 +23,7 @@ public class UtilisateurController {
 
     public UtilisateurController(UtilisateurService utilisateurService) {
         this.utilisateurService = utilisateurService;
-    }
+    }/**
     @GetMapping
     public ResponseEntity<List<UtilisateurResponse>> getAllUtilisateurs() {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
@@ -71,7 +71,7 @@ public class UtilisateurController {
     public ResponseEntity<List<UtilisateurResponse>> getUtilisateursByRole(@PathVariable Role role) {
         return ResponseEntity.ok(utilisateurService.getUtilisateursByRole(role));
     }
-/**
+**/
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<UtilisateurResponse>>> getAllUtilisateurs() {
@@ -94,7 +94,7 @@ public class UtilisateurController {
         ));
     }
 
-    @GetMapping("/role/{role}")
+ /**   @GetMapping("/role/{role}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<UtilisateurResponse>>> getUtilisateursByRole(@PathVariable Role role) {
         return ResponseEntity.ok(new ApiResponse<>(
@@ -103,7 +103,7 @@ public class UtilisateurController {
                 utilisateurService.getUtilisateursByRole(role),
                 null
         ));
-    }
+    }**/
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -140,5 +140,5 @@ public class UtilisateurController {
                 null
         ));
     }
-**/
+
 }

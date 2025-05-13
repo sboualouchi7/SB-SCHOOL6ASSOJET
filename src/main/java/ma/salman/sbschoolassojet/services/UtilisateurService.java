@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurMapper utilisateurMapper;
-    private final CloudinaryService cloudinaryService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -39,7 +39,7 @@ public class UtilisateurService {
                 .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
     }
 
-    /**@Transactional
+    @Transactional
     public UtilisateurResponse createUtilisateur(UtilisateurRequest request) {
         Utilisateur utilisateur = utilisateurMapper.toEntity(request);
         utilisateur.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -67,7 +67,7 @@ public class UtilisateurService {
         }
         utilisateurRepository.deleteById(id);
     }
-**/
+/**
     @Transactional
     public UtilisateurResponse createUtilisateur(UtilisateurRequest request, MultipartFile photo) throws IOException {
         Utilisateur utilisateur = utilisateurMapper.toEntity(request);
@@ -154,5 +154,5 @@ public class UtilisateurService {
 
     public boolean existsByEmail(String email) {
         return utilisateurRepository.existsByEmail(email);
-    }
+    }**/
 }
