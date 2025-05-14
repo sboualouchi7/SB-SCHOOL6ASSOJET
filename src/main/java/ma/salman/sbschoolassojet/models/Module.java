@@ -62,6 +62,10 @@ public class Module {
     @OneToMany(mappedBy = "module")
     private Set<SessionModule> sessionModules = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "examen_id")
+    private Examen examen;
+
     @PrePersist
     protected void onCreate() {
         this.dateCreation = LocalDate.now();

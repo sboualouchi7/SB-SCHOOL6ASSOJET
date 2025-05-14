@@ -39,6 +39,10 @@ public class Classe {
     @OneToMany(mappedBy = "classe")
     private Set<Module> modules = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "classe")
+    private Set<Examen> examens = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         this.dateCreation = LocalDate.now();
