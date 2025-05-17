@@ -21,7 +21,10 @@ public class AbsenceResponse {
     private String motif;
     private String justification;
     private boolean validee;
+    private Long moduleId;
     private String commentaire;
     private String nomEtudiant;
     private String moduleSeance;
+    private String nomModule;  // Nouveau champ pour afficher le nom du module
+
 }

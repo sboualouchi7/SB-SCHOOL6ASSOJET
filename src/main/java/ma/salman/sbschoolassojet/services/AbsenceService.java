@@ -10,6 +10,8 @@ import ma.salman.sbschoolassojet.models.*;
 import ma.salman.sbschoolassojet.models.Module;
 import ma.salman.sbschoolassojet.repositories.*;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,34 +141,51 @@ public class AbsenceService {
     // Nouvelles méthodes pour le flux d'enregistrement des absences
 
     public List<EtudiantResponse> getEtudiantsByModuleClasseForEnseignant(Long moduleId, Long classeId, Long enseignantId) {
-        // Vérifier que le module existe et est enseigné par cet enseignant
+        // Vérifier que le module existe
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Module non trouvé avec l'ID: " + moduleId));
-
-        if (!module.getEnseignantId().equals(enseignantId)) {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à ce module");
-        }
 
         // Vérifier que la classe existe
         Classe classe = classeRepository.findById(classeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Classe non trouvée avec l'ID: " + classeId));
 
-        // Vérifier que le module est bien associé à cette classe ou à son niveau
-        if (module.getClasseId() != null && !module.getClasseId().equals(classeId) &&
-                !(module.getNiveauId() != null && module.getNiveauId().equals(classe.getNiveauId()))) {
-            throw new IllegalArgumentException("Ce module n'est pas associé à cette classe");
+        // Récupérer le contexte d'authentification pour vérifier le rôle
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        // Si l'utilisateur n'est pas admin (donc enseignant), vérifier qu'il enseigne ce module
+        if (!isAdmin) {
+            if (!module.getEnseignantId().equals(enseignantId)) {
+                throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à ce module");
+            }
+
+            // Vérifier que le module est bien associé à cette classe ou à son niveau
+            if (module.getClasseId() != null && !module.getClasseId().equals(classeId) &&
+                    !(module.getNiveauId() != null && module.getNiveauId().equals(classe.getNiveauId()))) {
+                throw new IllegalArgumentException("Ce module n'est pas associé à cette classe");
+            }
         }
+        // Les administrateurs peuvent voir tous les étudiants sans restrictions
 
         // Récupérer les étudiants de la classe
         List<Etudiant> etudiants = etudiantRepository.findByClasseIdAndActifTrue(classeId);
-
         return etudiants.stream()
                 .map(etudiantMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+
+
+
+
     @Transactional
     public List<AbsenceResponse> createAbsencesBulk(List<AbsenceRequest> requests, Long enseignantId) {
+        System.out.println("Received " + requests.size() + " absence requests");
+        for (AbsenceRequest req : requests) {
+            System.out.println("Request data: " + req);
+            System.out.println("ModuleId: " + req.getModuleId());
+        }
         List<Absence> absences = new ArrayList<>();
 
         for (AbsenceRequest request : requests) {
@@ -182,8 +201,26 @@ public class AbsenceService {
             Etudiant etudiant = etudiantRepository.findById(request.getEtudiantId())
                     .orElseThrow(() -> new ResourceNotFoundException("Étudiant non trouvé avec l'ID: " + request.getEtudiantId()));
 
+
             // Créer l'absence
             Absence absence = absenceMapper.toEntity(request);
+
+            // Si moduleId n'est pas fourni, récupérer le moduleId depuis la séance
+            if (request.getModuleId() == null && seance.getModule() != null) {
+                absence.setModuleId(seance.getModule().getId());
+            } else if (request.getModuleId() != null) {
+                // Vérifier que le module existe
+                Module module = moduleRepository.findById(request.getModuleId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Module non trouvé avec l'ID: " + request.getModuleId()));
+
+                // Vérifier que l'enseignant est bien associé à ce module
+                if (!module.getEnseignantId().equals(enseignantId)) {
+                    throw new AccessDeniedException("Vous n'êtes pas autorisé à enregistrer des absences pour ce module");
+                }
+                absence.setModule(module);
+                absence.setModuleId(request.getModuleId());
+            }
+
             absences.add(absence);
         }
 
@@ -195,5 +232,4 @@ public class AbsenceService {
                 .map(absenceMapper::toDto)
                 .collect(Collectors.toList());
     }
-
 }

@@ -21,9 +21,9 @@ public class DataInitializerConfig {
             System.out.println("Démarrage de l'initialisation des utilisateurs...");
 
             // Vérifier si l'utilisateur existe déjà
-            if (!userRepository.existsByUsername("test")) {
+            if (!userRepository.existsByUsername("test5")) {
                 Utilisateur user = new Utilisateur();
-                user.setUsername("test");
+                user.setUsername("test5");
                 user.setPassword(passwordEncoder.encode("test"));
                 user.setEmail("test@example.com");
                 user.setNom("Test");

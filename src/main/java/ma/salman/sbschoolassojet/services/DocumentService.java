@@ -78,6 +78,7 @@ public class DocumentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Demandeur non trouvé avec l'ID: " + request.getDemandeurId()));
        document.setEtudiant(etudiant);
         document.setDemandeur(demandeur);
+        document.setDateCreation(LocalDate.now());
 
         return documentMapper.toDto(documentRepository.save(document));
     }
@@ -111,6 +112,7 @@ public class DocumentService {
         Document document = documentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Document non trouvé avec l'ID: " + id));
 
+        // Ne modifie QUE le statut
         document.setStatus(status);
 
         if (status == StatusDocument.PRET) {

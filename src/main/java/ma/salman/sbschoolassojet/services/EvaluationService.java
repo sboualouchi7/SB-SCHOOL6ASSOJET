@@ -109,7 +109,9 @@ public class EvaluationService {
         Session session = sessionRepository.findById(request.getSessionId())
                 .orElseThrow(() -> new ResourceNotFoundException("Session non trouvée avec l'ID: " + request.getSessionId()));
         evaluation.setSession(session);  // Associer la session à l'évaluation
-
+        if(request.getNote()>=10){
+            evaluation.setEstValidee(true);
+        }else {evaluation.setEstValidee(false);}
         return evaluationMapper.toDto(evaluationRepository.save(evaluation));
     }
 

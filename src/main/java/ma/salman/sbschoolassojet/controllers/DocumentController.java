@@ -183,7 +183,17 @@ public class DocumentController {
                 null
         ));
     }
-
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDocumentDemandeur(#id, authentication)")
+    public ResponseEntity<ApiResponse<Void>> deleteDocument(@PathVariable Long id) {
+        documentService.deleteDocument(id);
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Document supprimé avec succès",
+                null,
+                null
+        ));
+    }
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DocumentResponse>> updateStatus(
@@ -195,5 +205,5 @@ public class DocumentController {
                 documentService.updateStatus(id, status),
                 null
         ));
-}
+    }
 }

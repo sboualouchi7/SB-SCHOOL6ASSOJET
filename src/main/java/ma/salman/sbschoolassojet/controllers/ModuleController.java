@@ -73,7 +73,7 @@ public class ModuleController {
     //, @AuthenticationPrincipal Enseignant enseignant
 
     @GetMapping("/mes-modules")
-    @PreAuthorize("hasRole('ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole( 'ENSEIGNANT', 'ETUDIANT')")
     public ResponseEntity<ApiResponse<List<ModuleResponse>>> getModulesForCurrentEnseignant() {
         // Récupérer l'ID de l'enseignant connecté
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -134,10 +134,10 @@ public class ModuleController {
                 "Module supprimé avec succès",
                 null,
                 null
-        ));
+        )); 
     }
 
-    @GetMapping("/enseignant/module/{moduleId}/classes")
+    @GetMapping("/module/{moduleId}/classes")
     @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<ClasseResponse>>> getClassesByModuleForCurrentEnseignant(
             @PathVariable Long moduleId) {

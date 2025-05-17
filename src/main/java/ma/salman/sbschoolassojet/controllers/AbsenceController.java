@@ -165,7 +165,7 @@ public class AbsenceController {
 
 
     @GetMapping("/module/{moduleId}/classe/{classeId}/etudiants")
-    @PreAuthorize("hasRole('ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<EtudiantResponse>>> getEtudiantsByModuleAndClasse(
             @PathVariable Long moduleId,
             @PathVariable Long classeId) {

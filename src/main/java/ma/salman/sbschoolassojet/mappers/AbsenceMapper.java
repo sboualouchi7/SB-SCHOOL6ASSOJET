@@ -8,23 +8,26 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring",uses = {DateMapper.class})
+@Mapper(componentModel = "spring", uses = {DateMapper.class})
 public interface AbsenceMapper {
-   // AbsenceMapper INSTANCE = Mappers.getMapper(AbsenceMapper.class);
+    // AbsenceMapper INSTANCE = Mappers.getMapper(AbsenceMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "validee", constant = "false")
     @Mapping(target = "etudiant", ignore = true)
     @Mapping(target = "seance", ignore = true)
+    @Mapping(target = "module", ignore = true)  // Ignorer la relation module
     Absence toEntity(AbsenceRequest request);
 
     @Mapping(target = "nomEtudiant", expression = "java(entity.getEtudiant() != null ? entity.getEtudiant().getNom() + ' ' + entity.getEtudiant().getPrenom() : null)")
     @Mapping(target = "moduleSeance", expression = "java(entity.getSeance() != null && entity.getSeance().getModule() != null ? entity.getSeance().getModule().getLibelle() : null)")
+    @Mapping(target = "nomModule", expression = "java(entity.getModule() != null ? entity.getModule().getLibelle() : (entity.getSeance() != null && entity.getSeance().getModule() != null ? entity.getSeance().getModule().getLibelle() : null))")
     AbsenceResponse toDto(Absence entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "validee", ignore = true)
     @Mapping(target = "etudiant", ignore = true)
     @Mapping(target = "seance", ignore = true)
+    @Mapping(target = "module", ignore = true)  // Ignorer la relation module
     void updateEntityFromDto(AbsenceRequest request, @MappingTarget Absence entity);
 }

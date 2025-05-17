@@ -20,6 +20,7 @@ public class DocumentRequest {
 
     private String commentaire;
 
+
     @NotNull(message = "Le type de document est requis")
     private TypeDocument type;
 }

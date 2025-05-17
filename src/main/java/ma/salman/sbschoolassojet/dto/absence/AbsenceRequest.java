@@ -28,7 +28,7 @@ public class AbsenceRequest {
     @JsonFormat(pattern = "dd-MM-yyyy")
     @NotNull(message = "La date de fin est requise")
     private LocalDate dateFin;
-
+    private Long moduleId;
     private String motif;
     private String justification;
     private String commentaire;
