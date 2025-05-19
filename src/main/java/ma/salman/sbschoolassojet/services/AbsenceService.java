@@ -232,4 +232,28 @@ public class AbsenceService {
                 .map(absenceMapper::toDto)
                 .collect(Collectors.toList());
     }
+    /**
+     * Récupère les absences d'un étudiant pour un module spécifique
+     * @param etudiantId ID de l'étudiant
+     * @param moduleId ID du module
+     * @return Liste des absences trouvées
+     */
+    public List<AbsenceResponse> getAbsencesByEtudiantAndModule(Long etudiantId, Long moduleId) {
+        // Vérifier que l'étudiant existe
+        Etudiant etudiant = etudiantRepository.findById(etudiantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Étudiant non trouvé avec l'ID: " + etudiantId));
+
+        // On cherche tous les absences de l'étudiant
+        List<Absence> absences = absenceRepository.findByEtudiantId(etudiantId);
+
+        // On filtre par module
+        List<Absence> absencesFiltrees = absences.stream()
+                .filter(absence -> absence.getModuleId() != null && absence.getModuleId().equals(moduleId))
+                .collect(Collectors.toList());
+
+        // On convertit en DTO et on retourne
+        return absencesFiltrees.stream()
+                .map(absenceMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

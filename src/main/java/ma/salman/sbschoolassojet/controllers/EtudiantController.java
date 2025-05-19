@@ -88,7 +88,7 @@ public class EtudiantController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('ETUDIANT') and authentication.principal.id == #id)")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('ETUDIANT') )")
     public ResponseEntity<ApiResponse<EtudiantResponse>> updateEtudiant(
             @PathVariable Long id,
             @Valid @RequestBody EtudiantRequest request) {

@@ -51,7 +51,7 @@ public class DocumentController {
     }
 
     @GetMapping("/etudiant/{etudiantId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<List<DocumentResponse>>> getDocumentsByEtudiant(@PathVariable Long etudiantId) {
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -203,6 +203,47 @@ public class DocumentController {
                 true,
                 "Statut du document mis à jour avec succès",
                 documentService.updateStatus(id, status),
+                null
+        ));
+    }
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ETUDIANT', 'PARENT', 'ENSEIGNANT')")
+    public ResponseEntity<ApiResponse<List<DocumentResponse>>> getMyDocuments() {
+        // Récupérer les informations de l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+
+        // Vérifier le rôle
+        boolean isEtudiant = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ETUDIANT"));
+        boolean isParent = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_PARENT"));
+        boolean isEnseignant = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ENSEIGNANT"));
+
+        List<DocumentResponse> documents;
+
+        // Si c'est un étudiant, récupérer les documents le concernant
+        if (isEtudiant) {
+            documents = documentService.getDocumentsByEtudiant(userId);
+        }
+        // Si c'est un parent, récupérer les documents qu'il a demandés
+        else if (isParent || isEnseignant) {
+            documents = documentService.getDocumentsByDemandeur(userId);
+        } else {
+            return ResponseEntity.status(403).body(new ApiResponse<>(
+                    false,
+                    "Rôle non autorisé",
+                    null,
+                    null
+            ));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Documents récupérés avec succès",
+                documents,
                 null
         ));
     }

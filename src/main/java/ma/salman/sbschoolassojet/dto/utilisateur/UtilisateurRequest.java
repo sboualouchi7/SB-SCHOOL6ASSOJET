@@ -38,7 +38,7 @@ public class UtilisateurRequest {
     @NotBlank(message = "Le nom d'utilisateur est requis")
     private String username;
 
-    @NotBlank(message = "Le mot de passe est requis")
+   // @NotBlank(message = "Le mot de passe est requis")
     private String password;
 
     private String photo;

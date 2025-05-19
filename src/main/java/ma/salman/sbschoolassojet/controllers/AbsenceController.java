@@ -49,7 +49,7 @@ public class AbsenceController {
     }
 
     @GetMapping("/etudiant/{etudiantId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesByEtudiant(@PathVariable Long etudiantId) {
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -89,7 +89,7 @@ public class AbsenceController {
         ));
     }
     @GetMapping("/seance/{seanceId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT')")
     public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesBySeance(@PathVariable Long seanceId) {
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -100,7 +100,7 @@ public class AbsenceController {
     }
 
     @GetMapping("/etudiant/{etudiantId}/periode")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesByEtudiantAndPeriode(
             @PathVariable Long etudiantId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateDebut,
@@ -193,6 +193,18 @@ public class AbsenceController {
                 true,
                 "Absences enregistrées avec succès",
                 absenceService.createAbsencesBulk(requests, enseignantId),
+                null
+        ));
+    }
+    @GetMapping("/etudiant/{etudiantId}/module/{moduleId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    public ResponseEntity<ApiResponse<List<AbsenceResponse>>> getAbsencesByEtudiantAndModule(
+            @PathVariable Long etudiantId,
+            @PathVariable Long moduleId) {
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Absences par étudiant et module récupérées avec succès",
+                absenceService.getAbsencesByEtudiantAndModule(etudiantId, moduleId),
                 null
         ));
     }

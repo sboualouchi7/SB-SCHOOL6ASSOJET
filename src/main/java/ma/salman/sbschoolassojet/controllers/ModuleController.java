@@ -72,7 +72,58 @@ public class ModuleController {
     }
     //, @AuthenticationPrincipal Enseignant enseignant
 
+    @GetMapping("/etudiant/{etudiantId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or #etudiantId == authentication.principal.id")
+    public ResponseEntity<ApiResponse<List<ModuleResponse>>> getModulesByEtudiant(@PathVariable Long etudiantId) {
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Modules de l'étudiant récupérés avec succès",
+                moduleService.getModulesByEtudiant(etudiantId),
+                null
+        ));
+    }
+
+// Modifiez la méthode existante getModulesForCurrentEnseignant pour gérer les étudiants correctement
+
     @GetMapping("/mes-modules")
+    @PreAuthorize("hasAnyRole('ENSEIGNANT', 'ETUDIANT')")
+    public ResponseEntity<ApiResponse<List<ModuleResponse>>> getModulesForCurrentUser() {
+        // Récupérer les informations de l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+
+        // Déterminer le rôle de l'utilisateur
+        boolean isEtudiant = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ETUDIANT"));
+        boolean isEnseignant = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ENSEIGNANT"));
+
+        List<ModuleResponse> modules;
+
+        if (isEtudiant) {
+            // Si c'est un étudiant, récupérer les modules de sa classe
+            modules = moduleService.getModulesByEtudiant(userId);
+        } else if (isEnseignant) {
+            // Si c'est un enseignant, récupérer ses modules
+            modules = moduleService.getModulesByEnseignant(userId);
+        } else {
+            return ResponseEntity.status(403).body(new ApiResponse<>(
+                    false,
+                    "Rôle non autorisé",
+                    null,
+                    null
+            ));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Mes modules récupérés avec succès",
+                modules,
+                null
+        ));
+    }
+ /*   @GetMapping("/mes-modules")
     @PreAuthorize("hasAnyRole( 'ENSEIGNANT', 'ETUDIANT')")
     public ResponseEntity<ApiResponse<List<ModuleResponse>>> getModulesForCurrentEnseignant() {
         // Récupérer l'ID de l'enseignant connecté
@@ -87,7 +138,7 @@ public class ModuleController {
                 null
         ));
     }
-
+*/
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<ModuleResponse>> createModule(@Valid @RequestBody ModuleRequest request) {

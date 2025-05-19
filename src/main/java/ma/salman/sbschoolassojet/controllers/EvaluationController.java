@@ -36,6 +36,18 @@ public class EvaluationController {
         ));
     }
 
+    @GetMapping("/etudiant/{etudiantId}/module/{moduleId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    public ResponseEntity<ApiResponse<List<EvaluationResponse>>> getEvaluationsByEtudiantAndModule(
+            @PathVariable Long etudiantId,
+            @PathVariable Long moduleId) {
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Évaluations pour l'étudiant et le module récupérées avec succès",
+                evaluationService.getEvaluationsByEtudiantAndModule(etudiantId, moduleId),
+                null
+        ));
+    }
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParentForEvaluation(#id, authentication)")
     public ResponseEntity<ApiResponse<EvaluationResponse>> getEvaluationById(@PathVariable Long id) {
@@ -48,7 +60,7 @@ public class EvaluationController {
     }
 
     @GetMapping("/etudiant/{etudiantId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT', 'ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<List<EvaluationResponse>>> getEvaluationsByEtudiant(@PathVariable Long etudiantId) {
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -123,7 +135,7 @@ public class EvaluationController {
      * Récupère les évaluations de l'étudiant connecté pour un module spécifique
      */
     @GetMapping("/me/module/{moduleId}")
-    @PreAuthorize("hasRole('ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT')")
     public ResponseEntity<ApiResponse<List<EvaluationResponse>>> getMyEvaluationsByModule(
             @PathVariable Long moduleId) {
         // Récupérer l'ID de l'étudiant connecté
@@ -142,7 +154,7 @@ public class EvaluationController {
      * Récupère la moyenne de l'étudiant connecté pour un module spécifique
      */
     @GetMapping("/me/module/{moduleId}/moyenne")
-    @PreAuthorize("hasRole('ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT')")
     public ResponseEntity<ApiResponse<Float>> getMyMoyenneByModule(
             @PathVariable Long moduleId) {
         // Récupérer l'ID de l'étudiant connecté
@@ -157,7 +169,7 @@ public class EvaluationController {
         ));
     }
     @GetMapping("/etudiant/{etudiantId}/module/{moduleId}/moyenne")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT','ETUDIANT','PARENT') or @securityService.isEtudiantOrParent(#etudiantId, authentication)")
     public ResponseEntity<ApiResponse<Float>> getMoyenneByEtudiantAndModule(
             @PathVariable Long etudiantId,
             @PathVariable Long moduleId) {
@@ -170,7 +182,7 @@ public class EvaluationController {
     }
 
     @GetMapping("/module/{moduleId}/session/{sessionId}/moyenne")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT', 'ETUDIANT')")
     public ResponseEntity<ApiResponse<Float>> getMoyenneByModuleAndSession(
             @PathVariable Long moduleId,
             @PathVariable Long sessionId) {
