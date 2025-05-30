@@ -3,6 +3,7 @@ import lombok.RequiredArgsConstructor;
 import ma.salman.sbschoolassojet.dto.absence.AbsenceRequest;
 import ma.salman.sbschoolassojet.dto.absence.AbsenceResponse;
 import ma.salman.sbschoolassojet.dto.etudiant.EtudiantResponse;
+import ma.salman.sbschoolassojet.exceptions.BusinessException;
 import ma.salman.sbschoolassojet.exceptions.ResourceNotFoundException;
 import ma.salman.sbschoolassojet.mappers.AbsenceMapper;
 import ma.salman.sbschoolassojet.mappers.EtudiantMapper;
@@ -157,7 +158,7 @@ public class AbsenceService {
         // Si l'utilisateur n'est pas admin (donc enseignant), vérifier qu'il enseigne ce module
         if (!isAdmin) {
             if (!module.getEnseignantId().equals(enseignantId)) {
-                throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à ce module");
+                throw new BusinessException("Vous n'êtes pas autorisé à accéder à ce module");
             }
 
             // Vérifier que le module est bien associé à cette classe ou à son niveau
@@ -194,7 +195,7 @@ public class AbsenceService {
                     .orElseThrow(() -> new ResourceNotFoundException("Séance non trouvée avec l'ID: " + request.getSeanceId()));
 
             if (!seance.getEnseignantId().equals(enseignantId)) {
-                throw new AccessDeniedException("Vous n'êtes pas autorisé à enregistrer des absences pour cette séance");
+                throw new BusinessException("Vous n'êtes pas autorisé à enregistrer des absences pour cette séance");
             }
 
             // Vérifier que l'étudiant existe
@@ -215,7 +216,7 @@ public class AbsenceService {
 
                 // Vérifier que l'enseignant est bien associé à ce module
                 if (!module.getEnseignantId().equals(enseignantId)) {
-                    throw new AccessDeniedException("Vous n'êtes pas autorisé à enregistrer des absences pour ce module");
+                    throw new BusinessException("Vous n'êtes pas autorisé à enregistrer des absences pour ce module");
                 }
                 absence.setModule(module);
                 absence.setModuleId(request.getModuleId());

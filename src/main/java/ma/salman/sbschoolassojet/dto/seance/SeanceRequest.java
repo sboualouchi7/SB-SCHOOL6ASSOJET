@@ -29,11 +29,11 @@ public class SeanceRequest {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     @NotNull(message = "L'heure de début est requise")
     private LocalTime heureDebut;
 
-    @JsonFormat(pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     @NotNull(message = "L'heure de fin est requise")
     private LocalTime heureFin;
 

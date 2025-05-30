@@ -21,6 +21,18 @@ public class EtudiantController {
         this.etudiantService = etudiantService;
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> deleteEtudiant(@PathVariable Long id) {
+        etudiantService.deleteEtudiant(id);
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Étudiant supprimé avec succès",
+                null,
+                null
+        ));
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<EtudiantResponse>>> getAllEtudiants() {
@@ -113,16 +125,6 @@ public class EtudiantController {
         ));
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Void>> deleteEtudiant(@PathVariable Long id) {
-        etudiantService.deleteEtudiant(id);
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Étudiant supprimé avec succès",
-                null,
-                null
-        ));
-    }
+
 
 }

@@ -182,9 +182,9 @@ public class AbsenceController {
     }
 
     @PostMapping("/bulk")
-    @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<ApiResponse<List<AbsenceResponse>>> createAbsencesBulk(
             @Valid @RequestBody List<AbsenceRequest> requests) {
+
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long enseignantId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
